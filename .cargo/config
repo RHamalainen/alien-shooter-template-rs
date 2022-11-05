@@ -1,5 +1,6 @@
 [target.armv7a-none-eabi]
 linker = "C:/Apps/Xilinx_Vivado2017/SDK/2017.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"
+# linker = "arm-none-eabi-gcc"
 rustflags = [
    "-C", "link-arg=-mcpu=cortex-a9",
    "-C", "link-arg=-mfpu=vfpv3",
@@ -17,4 +18,5 @@ rustflags = [
 ]
 
 [build]
-target = "armv7a-none-eabi" # Cortex-A9 (soft-float ABI)
+# Cortex-A9 (soft-float ABI)
+target = "armv7a-none-eabi"
