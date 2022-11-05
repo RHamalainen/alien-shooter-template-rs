@@ -1,1 +1,5 @@
-nightly
+# We use old but proven version of the compiler.
+
+[toolchain]
+channel = "nightly-2020-12-30"
+target = "armv7a-none-eabi"
