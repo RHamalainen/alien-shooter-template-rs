@@ -1,5 +1,6 @@
 [target.armv7a-none-eabi]
-linker = "C:/Apps/Xilinx_Vivado2017/SDK/2017.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"
+# linker = "C:/Apps/Xilinx_Vivado2017/SDK/2017.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"
+linker = "/home/roni/xilinx/Vitis/2022.2/gnu/aarch32/lin/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"
 # linker = "arm-none-eabi-gcc"
 rustflags = [
    "-C", "link-arg=-mcpu=cortex-a9",
