@@ -1,8 +1,5 @@
 # Alien shooter, Rust version
 
-This branch has been edited to run on TC219 machines in particular.
-See `standalone` branch for a version that runs on an unknown system configuration.
-
 ## Setup
 
 1. [Install Rust](https://www.rust-lang.org/tools/install).
@@ -48,17 +45,21 @@ See `standalone` branch for a version that runs on an unknown system configurati
 ## Troubleshooting
 
 - `cargo build` fails with can't find crate for `core`.
-    * The Rust `core` library cannot be compiled for the target. The likely cause is that the correct component for the target is not added via rustup.
-    * You can add the component for the Cortex-A cross-compiler with ```rustup target add armv7a-none-eabi```.
+    * The Rust `core` library cannot be compiled for the target.
+    * The likely cause is that the correct component for the target is not added via `rustup`.
+    * You can add the component for the Cortex-A cross-compiler with `rustup target add armv7a-none-eabi`.
 - `cargo build` fails with "warning: couldn't execute `llvm-config --prefix`".
     * Likely cause: cargo cannot detect the LLVM toolchain, LLVM needs to be installed.
     * LLVM can be installed from https://releases.llvm.org/download.html.
-- `cargo build` fails with "cannot detect Xilinx SDK at C:/Xilinx".
-    * The libxil FFI dependency cannot locate the Xilinx toolchain automatically. Make sure that Xilinx SDK is installed and set its path using `export XILINX_SDK=/path/to/Xilinx/SDK/version`.
+- `cargo build` fails with "cannot detect Xilinx SDK at `C:/Xilinx`".
+    * The `libxil` FFI dependency cannot locate the Xilinx toolchain automatically.
+    * !?!?!? TODO: OLD INFO. Make sure that Xilinx SDK is installed and set its path using `export XILINX_SDK=/path/to/Xilinx/SDK/version`.
 - `cargo build` fails with "error: linker `arm-none-eabi-gcc` not found".
     * The appropriate linker is not found.
     * arm-none-eabi-gcc can be installed on debian (like Ubuntu) using apt/dpkg using `apt-get install gcc-arm-none-eabi`.
-    * If the build system cannot find the linker, use `.cargo/config` to point `cargo` to a functioning linker using the key `linker = /location/of/linker-executable`. Xilinx ships with a functioning cross-linker, so if you can find the directory where the SDK is installed, the Windows path to the linker will be `"</location/of/Xilinx>/SDK/<version>/2017.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"`. On linux, `nt` will be `lin` instead.
+    * If the build system cannot find the linker, use `.cargo/config` to point `cargo` to a functioning linker using the key `linker = /location/of/linker-executable`.
+        * Xilinx ships with a functioning cross-linker, so if you can find the directory where the SDK is installed, the Windows path to the linker will be `"</location/of/Xilinx>/SDK/<version>/2017.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"`.
+        * On linux, `nt` will be `lin` instead.
 - `cargo build` fails with "error: linker `C:/.../arm-none-eabi-gcc` not found".
     * The GCC linker used for this work is not available at its pre-configured location at `.cargo/config`.
     * See above for a potential solution.
