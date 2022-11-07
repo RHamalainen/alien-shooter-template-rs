@@ -17,11 +17,11 @@ See `standalone` branch for a version that runs on an unknown system configurati
 - Clone the repository, and change working directory.
     - `git clone https://github.com/RHamalainen/alien-shooter-template-rs/`
     - `cd alien-shooter-template-rs`
-- Set environment variable that points to Xilinx SDK.
+- Set environment variables that point to Xilinx SDK toolchain.
     - If you use `bash` as a terminal.
-        - `export XILINX_SDK="C:/Apps/Xilinx_Vivado2017/SDK/2017.2"`
+        - `source ./scripts/tc219.env`
     - If you use `powershell` as a terminal.
-        - `$Env:XILINX_SDK = "C:/Apps/Xilinx_Vivado2017/SDK/2017.2"`
+        - `. ./scripts/tc219.ps1`
 - Build the binary.
     - `cargo build`
 - Run the binary on a connected PYNQ-Z1:
