@@ -1,5 +1,5 @@
 # We use old but proven version of the compiler.
 
 [toolchain]
-channel = "nightly-2020-12-30"
+channel = "nightly-2022-02-14"
 target = "armv7a-none-eabi"

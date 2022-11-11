@@ -9,13 +9,19 @@ rustflags = [
    "-C", "link-arg=-mfloat-abi=soft",
    "-C", "link-arg=-Wl,-build-id=none",
    "-C", "link-arg=-specs=pynq/Xilinx.spec",
-   "-C", "link-arg=-Wl,-T",
+   #"-C", "link-arg=-Wl,-T",
    # linker-script
-   "-C", "link-arg=-Wl,pynq/lscript.ld",
+   "-C", "link-arg=-Wl,--script=pynq/lscript.ld",
    # Link required static libraries
    "-C", "link-arg=-lc",
    "-C", "link-arg=-lgcc",
    "-C", "link-arg=-lxil_sf",
+   #"-C", "panic=abort",
+   "-C", "link-arg=-Wl,--trace",
+   "-C", "link-arg=-Wl,--trace-symbol=memcpy",
+   "-C", "link-arg=-Wl,-Map=lol",
+   # FIXME
+   "-C", "link-arg=-Wl,--unresolved-symbols=ignore-all",
 ]
 
 [build]
