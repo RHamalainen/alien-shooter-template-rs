@@ -1,0 +1,4 @@
+{
+    "rust.target": "armv7a-none-eabi",
+    "rust.all_targets": false
+}
