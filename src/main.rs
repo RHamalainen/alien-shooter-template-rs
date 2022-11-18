@@ -1,79 +1,75 @@
-//! Implements the led-blinker course work on Xilinx Pynq-Z1 SoC.
+//! Implements the LED-blinker course work on Xilinx PYNQ-Z1 SoC.
 
-// The `no_std` attribute prevents Rust standard library from being built into the binary. This is
-// necessary, because the standard library is not available for baremetal Cortex-A9. The Rust `std`
-// is in many ways similar to the C++ `std`.
+// Do not include Rust standard library.
+// Rust standard library is not available for bare metal Cortex-A9.
+// Thus we use [core](https://doc.rust-lang.org/core/)-library.
 #![no_std]
-// Open feature gates to some particular extras related to low-level hacking that are not part of
-// the core Rust language: assembler, language keyword overwriting and program entry point.
-//#![feature(asm, lang_items, start)]
-//#![feature(start, panic_always_abort)]
+// Open feature gates to certain, currently WIP, features which might become part of Rust in future.
 #![feature(start)]
 
+// Define crate's module hierarchy.
 mod interrupt;
 mod pixel;
 mod print;
 
-// xil_sys contains the Xilinx Cortex-A9 board support package (BSP) and a Rust
-// FFI. We rename the module here as `xil`.
+// `xil_sys` contains the Xilinx Cortex-A9 board support package (BSP) and a Rust FFI.
+// We rename the module here as `xil`.
 use xil_sys as xil;
 
-// Re-import symbols from pixel without the `pixel::` prefix
+// Re-import symbols from pixel without the `pixel::` prefix.
 use pixel::*;
 
-// Rust `core` imports for using C-style void-pointers and info for a custom
-// panic implementation.
+// Rust `core` imports for using C-style void-pointers and info for a custom panic implementation.
 use core::{ffi::c_void, panic::PanicInfo};
 
-// Declare static globals like in the C-version. This is a reasonable way of
-// communicating between threads in interrupt-driven concurrency.
+// Declare static globals like in the C-version.
+// This is a reasonable way of communicating between threads in interrupt-driven concurrency.
 pub static mut A_GLOBAL: usize = 0;
 
-// Define the address of the ordinary LED interface in physical memory. Putting
-// bits into the LED address the right way may cause desired blinking of
-// hardware LEDs.
-// FIXME: 0x00000000 is not the LED address. The correct address can be found in
-// some of the provided documentation.
+// Define the address of the ordinary LED interface in physical memory.
+// Putting bits into the LED address the right way may cause desired blinking of hardware LEDs.
+// FIXME: 0x00000000 is not the LED address.
+// The correct address can be found in some of the provided documentation.
 pub const LED_ADDRESS: *mut u8 = 0x00000000 as *mut u8;
 
-// The #[start] attribute is usually not necessary, but we need to show the
-// cross-compiler where to start executing. The underscore before the argument
-// signals that the parameter is not used.
+// The #[start] attribute tell's the cross-compiler where to start executing.
+// Normally it is not needed.
+// Underscore before the argument signals that the parameter is not used.
 #[start]
 fn main(_argc: isize, _argv: *const *const u8) -> isize {
-    // Initialize board interrupt functions
-    // N.B. Do not touch this function, concurrency is set up here
+    // Initialize board interrupt functions.
+    // N.B. Do not touch this function, concurrency is set up here.
     interrupt::init();
 
-    // An unsafe block for setting up the LED-matrix using the C-API, and for
-    // touching a static global.
+    // An unsafe block for setting up the LED-matrix using the C-API, and for touching a static global.
     unsafe {
         setup_led_matrix();
-        // Setting a static global requires an `unsafe` block in Rust, because the
-        // compiler cannot verify soundness in a case where an interrupt causes
-        // simultaneous access from another thread. Thus we must make sure ourselves,
-        // not to do that.
+        // Setting a static global variable requires an `unsafe` block in Rust.
+        // Compiler can not verify soundness in a case where an interrupt causes simultaneous access from another thread.
+        // Now it is our responsibility to make sure that this does not happen.
         A_GLOBAL = 0;
     }
 
     unsafe {
-        // Enables the board to break execution of the main thread using an interrupt
-        // request (IRQ), and jump onto the interrupt handler. Direct calls to C API
-        // functions (`xil::*`) are `unsafe` by default, because the compiler
-        // does not verify soundness of C code.
+        // Enable interrupts.
+        // Now control flow can change from main loop to an interrupt handler.
+        // This change of control flow happens when an interrupt request (IRQ) is asserted.
+        // Direct calls to C API functions (`xil::*`) are `unsafe` by default.
+        // The compiler does not verify soundness of C code.
         xil::Xil_ExceptionEnable();
     }
 
     // Prints up to 64 characters using standard Rust [print formatting](https://doc.rust-lang.org/std/fmt/index.html).
+    // You should see this using PuTTY.
     println64!("Hello Rust!");
 
-    // Empty loop to keep the program running while the interrupt handlers do all the
-    // work
+    // Empty loop to keep the program running while the interrupt handlers do all the work.
     loop {}
 }
 
-/// Interrupt handler for switch and buttons. This function gets called on
-/// switch and button interrupts. Connected buttons are at bank 2.
+/// Interrupt handler for switch and buttons.
+/// This function gets called on switch and button interrupts.
+/// Connected buttons are at bank 2.
 ///
 /// # Arguments
 ///
@@ -103,10 +99,9 @@ pub unsafe extern "C" fn button_handler(callback_ref: *mut c_void, _bank: u32, s
     // End of your code
 }
 
-/// Timer interrupt handler for led matrix update. The function updates only one
-/// line (`CHANNEL`) of the matrix per call, but sets `channel` as the next line
-/// to be updated. `pub extern "C"` qualifier is required to allow passing the
-/// handler to the C API.
+/// Timer interrupt handler for led matrix update.
+/// The function updates only one line (`CHANNEL`) of the matrix per call, but sets `channel` as the next line to be updated.
+/// `pub extern "C"` qualifier is required to allow passing the handler to the C API.
 pub unsafe extern "C" fn tick_handler(callback_ref: *mut c_void) {
     // Exceptions need to be disabled during screen update.
     xil::Xil_ExceptionDisable();

@@ -30,6 +30,11 @@
 - Check board's output.
     - See `Open an input-output interface to the board` at [the online exercise guide](https://github.com/RHamalainen/comp.ce.100-rust-exercise-guide/blob/master/src/2_build-and-run.md) for how to see the output using PuTTY. The program needs to be re-run to get the output to show on the terminal.
 
+## Create documentation for your crate
+
+- Build and view.
+    - `cargo doc --open`
+
 ## Directory structure and files
 
 |Path|Description|

@@ -1,29 +1,35 @@
 [target.armv7a-none-eabi]
+# This path works in laboratory TC219.
 linker = "C:/Apps/Xilinx_Vivado2017/SDK/2017.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"
+
+# Example path for local computer with Vitis.
 # linker = "/home/roni/xilinx/Vitis/2022.2/gnu/aarch32/lin/gcc-arm-none-eabi/bin/arm-none-eabi-gcc"
+
+# If you have the driver in path.
 # linker = "arm-none-eabi-gcc"
+
 rustflags = [
    "-C", "link-arg=-mcpu=cortex-a9",
    "-C", "link-arg=-mfpu=vfpv3",
-   # Hard float ABI is not supported by rustup yet, thus we use soft float ABI
+   # Hard float ABI is not supported by rustup yet, thus we use soft float ABI.
    "-C", "link-arg=-mfloat-abi=soft",
    "-C", "link-arg=-Wl,-build-id=none",
    "-C", "link-arg=-specs=pynq/Xilinx.spec",
    #"-C", "link-arg=-Wl,-T",
-   # linker-script
+   # Linker script.
    "-C", "link-arg=-Wl,--script=pynq/lscript.ld",
-   # Link required static libraries
+   # Link required static libraries.
    "-C", "link-arg=-lc",
    "-C", "link-arg=-lgcc",
    "-C", "link-arg=-lxil_sf",
    #"-C", "panic=abort",
-   "-C", "link-arg=-Wl,--trace",
-   "-C", "link-arg=-Wl,--trace-symbol=memcpy",
-   "-C", "link-arg=-Wl,-Map=lol",
+   #"-C", "link-arg=-Wl,--trace",
+   #"-C", "link-arg=-Wl,--trace-symbol=memcpy",
+   #"-C", "link-arg=-Wl,-Map=mapping",
    # FIXME
    "-C", "link-arg=-Wl,--unresolved-symbols=ignore-all",
 ]
 
 [build]
-# Cortex-A9 (soft-float ABI)
+# Cortex-A9 (soft-float ABI).
 target = "armv7a-none-eabi"

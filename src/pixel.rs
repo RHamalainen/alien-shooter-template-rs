@@ -1,11 +1,27 @@
-use crate::xil;
-use crate::LED_ADDRESS;
+/* Some tips.
+
+# How to set memory address's content to zero?
+
+core::ptr::write_volatile(ADDRESS, 0);
+
+# How to read memory address's content?
+
+let value = core::ptr::read_volatile(ADDRESS);
+
+
+
+
+*/
+
+use crate::{xil, LED_ADDRESS};
 
 const PAGE_SIZE: usize = 10;
 
 pub static mut PAGE: usize = 0;
 
-/// Table for dots. Indices are page, x, y, color. Initialized to zero.
+/// Table for dots.
+/// Indices are page, x, y, color.
+/// Initialized to zero.
 static mut DOTS: [[[[u8; PAGE_SIZE]; 8]; 8]; 3] = [[[[0; PAGE_SIZE]; 8]; 8]; 3];
 
 pub unsafe fn setup_led_matrix() {
@@ -15,8 +31,8 @@ pub unsafe fn setup_led_matrix() {
     */
 
     // The screen must be reset at start
-    // Tip: use the following one-liners to flip bits on or off at ADDRESS. Oh
-    // yes, it's a zero-cost lambda function in an embedded application.
+    // Tip: use the following one-liners to flip bits on or off at ADDRESS.
+    // Oh yes, it's a zero-cost lambda function in an embedded application.
     /*
     mutate_ptr(ADDR, |x| x | 1);
     mutate_ptr(ADDR, |x| x ^ 1);
@@ -59,7 +75,12 @@ pub unsafe fn open_line(i: u8) {
     */
 }
 
-/// A helper one-liner for mutating raw pointers at given address. You shouldn't need to change this.
+/// A helper one-liner for mutating raw pointers at given address.
+/// You shouldn't need to change this.
+///
+/// # How to use
+///
+/// Set a pixel at index
 unsafe fn mutate_ptr<A, F>(addr: *mut A, mutate_fn: F)
 where
     F: FnOnce(A) -> A,
