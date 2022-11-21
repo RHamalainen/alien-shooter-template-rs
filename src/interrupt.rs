@@ -1,4 +1,6 @@
-//! Initializes course work particular interrupts. Touching not recommended.
+//! Initializes course work particular interrupts.
+//! Touching not recommended.
+
 // Use board support package (BSP) foreign-function interface (FFI) functions,
 // eg. for initializing interrupts
 use crate::{button_handler, tick_handler, tick_handler_1, xil};

@@ -1,9 +1,9 @@
-# Alien shooter, Rust version
+# Alien shooter with Rust
 
 ## Setup
 
 1. [Install Rust](https://www.rust-lang.org/tools/install).
-2. Install Rust's cross-compiler for ARM.
+2. Install Rust's cross-compiler for ARM Cortex-A9.
     - `rustup target add armv7a-none-eabi`.
 3. Make sure you have Xilinx SDK installed.
     - Xilinx SDK is already installed on TC219 machines.

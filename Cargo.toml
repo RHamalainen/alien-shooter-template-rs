@@ -1,5 +1,3 @@
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [package]
 name = "alien-shooter-rs"
 version = "0.2.0"
@@ -7,16 +5,12 @@ authors = [
     "Henri Lunnikivi <henri.lunnikivi@tuni.fi>",
     "Roni Hämäläinen <roni.hamalainen@tuni.fi>",
 ]
-#edition = "2018"
 edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 xil-sys = { git = "https://github.com/RHamalainen/xil-custom-sys" }
-
-# For testing purposes.
-# xil-sys = { path = "../xil-custom-sys/" }
-# xil-sys = { git = "https://github.com/RHamalainen/xil-custom-sys", rev = "6645019" }
-# xil-sys = { git = "https://github.com/hegza/xil-custom-sys" } #, branch = "comp.ce.100-s2020" }
 
 # For simple print-implementation.
 arrayvec = { version = "0.5.1", default-features = false }

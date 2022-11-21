@@ -1,4 +1,4 @@
-//! A couple of macros to implement limited Rust-style printing via `xil::print` and `format_args`.
+//! Macros for limited Rust-style printing via `xil::print` and `format_args`.
 
 /// Adds a newline (\n\r) to the format string and calls print.
 /// Prints up to 64 characters.

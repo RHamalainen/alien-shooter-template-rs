@@ -1,4 +1,6 @@
 //! Implements the LED-blinker course work on Xilinx PYNQ-Z1 SoC.
+//!
+//! Uses functionality defined in Xilinx's board support package (BSP) via Rust's foreign function interface (FFI).
 
 // Do not include Rust standard library.
 // Rust standard library is not available for bare metal Cortex-A9.
@@ -67,9 +69,13 @@ fn main(_argc: isize, _argv: *const *const u8) -> isize {
     loop {}
 }
 
-/// Interrupt handler for switch and buttons.
-/// This function gets called on switch and button interrupts.
+/// Interrupt handler for switches and buttons.
+///
+/// Pressing a button or switching a switch causes an GPIO interrupt.
+/// This function is used to handle that interrupt.
+///
 /// Connected buttons are at bank 2.
+/// This is defined during hardware synthesis using Vivado (e.g. could also be in bank 3).
 ///
 /// # Arguments
 ///
@@ -110,37 +116,31 @@ pub unsafe extern "C" fn tick_handler(callback_ref: *mut c_void) {
 
     // End of your code
 
-    // Cast `void*` received from the C API to the "Triple Timer Counter" (TTC)
-    // instance pointer. The C API needs to use void pointers to pass data around,
-    // because the C specification does not describe abstract data types (ADT).
+    // Cast `void*` received from the C API to the "Triple Timer Counter" (TTC) instance pointer.
+    // The C API needs to use void pointers to pass data around.
+    // The C specification does not describe abstract data types (ADT).
     let ttc = callback_ref as *mut xil::XTtcPs;
 
-    // Clear timer interrupt status
-    // N.B. Do not remove
+    // Clear timer interrupt status.
     let status_event = xil::XTtcPs_GetInterruptStatus(ttc);
     xil::XTtcPs_ClearInterruptStatus(ttc, status_event);
-
-    // Put exceptions back on (previously disabled at the start of the interrupt
-    // handler)
     xil::Xil_ExceptionEnable();
 }
 
-/// Timer interrupt handler for moving the alien, shooting, and other game
-/// logic. See also [tick_handler](fn.tick_handler.html) and its line comments
-/// for details.
+/// Timer interrupt handler for moving the alien, shooting, and other game logic.
+/// See also [tick_handler](fn.tick_handler.html) and its line comments for details.
 pub unsafe extern "C" fn tick_handler_1(callback_ref: *mut c_void) {
     // TODO: Write code here
 
     // End of your code
 
-    // Clear timer interrupt status
-    // N.B. Do not remove
+    // Clear timer interrupt status.
     let ttc = callback_ref as *mut xil::XTtcPs;
     let status_event = xil::XTtcPs_GetInterruptStatus(ttc);
     xil::XTtcPs_ClearInterruptStatus(ttc, status_event);
 }
 
-/// A custom panic handler for Cortex-A9
+/// A custom panic handler for Cortex-A9.
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     // logs "panicked at '$reason', src/main.rs:27:4" to host stdout
